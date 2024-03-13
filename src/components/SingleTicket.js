@@ -7,7 +7,7 @@ import { TESelect } from 'tw-elements-react';
 
 const SingleTicket = ({id, title, description, ticketStatus, setErrorUpdate, setErrorRemove}) => {
   const [popup, setPopup] = useState(false);
-  const [updatedOption, setUpdatedOption] = useState("");
+  const [updatedOption, setUpdatedOption] = useState("To Do");
 
   const dispatch = useDispatch();
   const handleRemoveTicket = async () => {
