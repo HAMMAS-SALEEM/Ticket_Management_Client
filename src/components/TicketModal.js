@@ -15,7 +15,6 @@ export default function TicketModal() {
   const [showModal, setShowModal] = useState(false);
   return (
     <div>
-      {/* <!-- Button trigger modal --> */}
       <TERipple rippleColor="white">
         <button
           type="button"
@@ -25,17 +24,13 @@ export default function TicketModal() {
           Create Ticket
         </button>
       </TERipple>
-
-      {/* <!-- Modal --> */}
       <TEModal show={showModal} setShow={setShowModal}>
         <TEModalDialog>
           <TEModalContent>
             <TEModalHeader>
-              {/* <!--Modal title--> */}
               <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
                 Create Ticket
               </h5>
-              {/* <!--Close button--> */}
               <button
                 type="button"
                 className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
@@ -58,9 +53,7 @@ export default function TicketModal() {
                 </svg>
               </button>
             </TEModalHeader>
-            {/* <!--Modal body--> */}
             <TEModalBody>
-
             <TicketForm setShowModal={setShowModal} />
             </TEModalBody>
             <TEModalFooter>

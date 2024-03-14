@@ -26,7 +26,7 @@ const createTicket = async (values) => {
     } catch (error) {
       if (error.response && error.response.status === 403) {
       } else {
-        throw error;
+        return error;
       }
     }
   };
@@ -34,10 +34,8 @@ const createTicket = async (values) => {
 
 const getTickets = async () => {
     try {
-      const userId = JSON.parse(localStorage.getItem('user')).id;
       const accessToken = JSON.parse(localStorage.getItem('user')).accessToken;
       const res = await axios.get(API_URL + 'tickets', {
-        params: { userId },
         headers: {
           'x-access-token': accessToken,
         },
@@ -45,7 +43,7 @@ const getTickets = async () => {
   
       return res.data;
     } catch (error) {
-      throw error;
+      return error;
     }
   };
   
@@ -65,7 +63,7 @@ const updateTicket = async (id, ticketStatus) => {
     
         return res;
       } catch (error) {
-        throw error;
+        return error;
       }
 }
 
@@ -81,7 +79,7 @@ const removeTicket = async (id) => {
     
         return res;
       } catch (error) {
-        throw error;
+        return error;
       }  
 }
 
