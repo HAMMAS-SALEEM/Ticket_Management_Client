@@ -4,6 +4,7 @@ import { fetchTickets } from '../redux/slices/ticketSlice'
 import SingleTicket from './SingleTicket'
 import { categoryOptions, statusOptions } from './Options'
 import { TESelect } from 'tw-elements-react'
+import ErrorBar from './ErrorBar'
 
 const Tickets = () => {
   const [statusFilter, setStatusFilter] = useState("");
@@ -13,14 +14,19 @@ const Tickets = () => {
 
   const dispatch = useDispatch();
   const tickets = useSelector((store)=>store.tickets.tickets)
-  const handleTickets = () => {
-    dispatch(fetchTickets())
-  }
+  
+  const handleTickets = () => dispatch(fetchTickets());
+
+  const handleErrorUpdate = () => setErrorUpdate(!errorUpdate);
+  const handleErrorRemove = () => setErrorRemove(!errorRemove);
 
   const removeFilters = () => {
     setStatusFilter("");
     setCategoryFilter(0);
   }
+
+  const errorMessageRemove = "Ticket Removing Failed!";
+  const errorMessageUpdate = "Ticket Updation Failed!"
 
   useEffect(() => {
     dispatch(fetchTickets())
@@ -33,15 +39,24 @@ const Tickets = () => {
         <TESelect data={statusOptions} onValueChange={(value) => setStatusFilter(value.value)} className="m-2" />
         <TESelect data={categoryOptions} onValueChange={(value) => setCategoryFilter(value.value)} className="m-2" />
       </div>
-      <span className={errorUpdate ? "bg-red-500 p-2 text-white rounded" : undefined}>{errorUpdate ? "Ticket Updation Failed!" : ''}</span>
-      <span className={errorRemove ? "bg-red-500 p-2 text-white rounded" : undefined}>{errorRemove ? "Ticket Removing Failed!" : ''}</span>
-      <table className="">
+      <ErrorBar
+        errorStatus={errorUpdate}
+        errorMessage={errorMessageUpdate}
+        handleError={handleErrorUpdate}
+      />
+
+      <ErrorBar
+        errorStatus={errorRemove}
+        errorMessage={errorMessageRemove}
+        handleError={handleErrorRemove}
+      />
+      <table>
         <thead>
           <tr>
             <th>Title</th>
             <th>Description</th>
             <th>Status</th>
-            <th>actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

@@ -12,8 +12,10 @@ module.exports = {
             'newblue': '1657baa',
             'purple': 'a155b9',
             'pink': 'f765a3',
-
           },
+          opacity: {
+            '54': '.54'
+          }
       },
   },
   darkMode: "class",

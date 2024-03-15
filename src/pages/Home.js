@@ -1,16 +1,44 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Tickets from '../components/Tickets'
 import authService from '../services/auth-service'
 import TicketModal from '../components/TicketModal'
+import SuccessBar from '../components/SuccessBar'
 
 const Home = ({handleAuth}) => {
+  const [ticketCreationSuccess, setTicketCreationSuccess] = useState("false");
+  const [ticketRemovalSuccess, setTicketRemovalSuccess] = useState("false");
+  const [ticketUpdationSuccess, setTicketUpdationSuccess] = useState("false");
+
+  const handleTicketCreationSuccess = () => setTicketCreationSuccess(!ticketCreationSuccess);
+  const handleTicketRemovalSuccess = () => setTicketRemovalSuccess(!ticketRemovalSuccess);
+  const handleTicketUpdationSuccess = () => setTicketUpdationSuccess(!ticketUpdationSuccess);
 
   const handleSignOut = async () => {
     authService.logout();
     handleAuth();
   }
+
+  const ticketCreationSuccessMessage = "Ticket Creation Successful!"
+  const ticketRemovalSuccessMessage = "Ticket Removal Successful!"
+  const ticketUpdationSuccessMessage = "Ticket Updation Successful!"
+
   return (
     <div>
+      <SuccessBar
+        successStatus={ticketCreationSuccess}
+        successMessage={ticketCreationSuccessMessage}
+        handleSuccess={handleTicketCreationSuccess} 
+      />
+      <SuccessBar
+        successStatus={ticketRemovalSuccess}
+        successMessage={ticketRemovalSuccessMessage}
+        handleSuccess={handleTicketRemovalSuccess} 
+      />      
+      <SuccessBar
+        successStatus={ticketUpdationSuccess}
+        successMessage={ticketUpdationSuccessMessage}
+        handleSuccess={handleTicketUpdationSuccess} 
+      />
       <div className="flex justify-between">
         <TicketModal />
         <button 
