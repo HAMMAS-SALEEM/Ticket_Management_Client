@@ -4,29 +4,21 @@ import { fetchTickets } from '../redux/slices/ticketSlice'
 import SingleTicket from './SingleTicket'
 import { categoryOptions, statusOptions } from './Options'
 import { TESelect } from 'tw-elements-react'
-import ErrorBar from './ErrorBar'
 
 const Tickets = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState(0);
-  const [errorUpdate, setErrorUpdate] = useState(false);
-  const [errorRemove, setErrorRemove] = useState(false);
 
   const dispatch = useDispatch();
+
   const tickets = useSelector((store)=>store.tickets.tickets)
   
   const handleTickets = () => dispatch(fetchTickets());
-
-  const handleErrorUpdate = () => setErrorUpdate(!errorUpdate);
-  const handleErrorRemove = () => setErrorRemove(!errorRemove);
 
   const removeFilters = () => {
     setStatusFilter("");
     setCategoryFilter(0);
   }
-
-  const errorMessageRemove = "Ticket Removing Failed!";
-  const errorMessageUpdate = "Ticket Updation Failed!"
 
   useEffect(() => {
     dispatch(fetchTickets())
@@ -39,17 +31,6 @@ const Tickets = () => {
         <TESelect data={statusOptions} onValueChange={(value) => setStatusFilter(value.value)} className="m-2" />
         <TESelect data={categoryOptions} onValueChange={(value) => setCategoryFilter(value.value)} className="m-2" />
       </div>
-      <ErrorBar
-        errorStatus={errorUpdate}
-        errorMessage={errorMessageUpdate}
-        handleError={handleErrorUpdate}
-      />
-
-      <ErrorBar
-        errorStatus={errorRemove}
-        errorMessage={errorMessageRemove}
-        handleError={handleErrorRemove}
-      />
       <table>
         <thead>
           <tr>
@@ -81,8 +62,7 @@ const Tickets = () => {
                   title={ticket.title} 
                   description={ticket.description} 
                   ticketStatus={ticket.ticketStatus} 
-                  setErrorUpdate={setErrorUpdate} 
-                  setErrorRemove={setErrorRemove} />
+                  />
                 </tr>
             )) : <tr></tr>
         }

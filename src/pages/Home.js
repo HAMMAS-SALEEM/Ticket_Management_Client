@@ -1,44 +1,87 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Tickets from '../components/Tickets'
 import authService from '../services/auth-service'
 import TicketModal from '../components/TicketModal'
 import SuccessBar from '../components/SuccessBar'
+import { useDispatch, useSelector } from 'react-redux'
+import { 
+  handleTicketCreated, 
+  handleTicketCreatedError, 
+  handleTicketRemoved, 
+  handleTicketRemovedError, 
+  handleTicketUpdated, 
+  handleTicketUpdatedError } from '../redux/slices/ticketStatusSlice';
+import ErrorBar from '../components/ErrorBar'
 
 const Home = ({handleAuth}) => {
-  const [ticketCreationSuccess, setTicketCreationSuccess] = useState("false");
-  const [ticketRemovalSuccess, setTicketRemovalSuccess] = useState("false");
-  const [ticketUpdationSuccess, setTicketUpdationSuccess] = useState("false");
 
-  const handleTicketCreationSuccess = () => setTicketCreationSuccess(!ticketCreationSuccess);
-  const handleTicketRemovalSuccess = () => setTicketRemovalSuccess(!ticketRemovalSuccess);
-  const handleTicketUpdationSuccess = () => setTicketUpdationSuccess(!ticketUpdationSuccess);
+  const dispatch = useDispatch();
+
+  const ticketStatus = useSelector((store) => store.ticketStatus);
 
   const handleSignOut = async () => {
     authService.logout();
     handleAuth();
   }
 
-  const ticketCreationSuccessMessage = "Ticket Creation Successful!"
-  const ticketRemovalSuccessMessage = "Ticket Removal Successful!"
-  const ticketUpdationSuccessMessage = "Ticket Updation Successful!"
+  let messages = [
+    { 
+      ticketMessage: "Ticket Creation Successful!",
+      handleTicket: () => dispatch(handleTicketCreated(false)),
+      status: ticketStatus.ticketCreated
+    },
+    {
+      ticketMessage: "Ticket Removal Successful!",
+      handleTicket: () => dispatch(handleTicketRemoved(false)),
+      status: ticketStatus.ticketRemoved
+    },
+    {
+      ticketMessage: "Ticket Updation Successful!",
+      handleTicket: () => dispatch(handleTicketUpdated(false)),
+      status: ticketStatus.ticketUpdated
+    }
+  ]
+
+  let errorMessages = [
+    {
+      ticketMessage: "Ticket Creation Failed!",
+      handleTicket: () => dispatch(handleTicketCreatedError(false)),
+      status: ticketStatus.ticketCreatedError,
+    },
+    {
+      ticketMessage: "Ticket Removal Failed!",
+      handleTicket: () => dispatch(handleTicketRemovedError(false)),
+      status: ticketStatus.ticketRemovedError,
+    },
+    {
+      ticketMessage: "Ticket Updation Failed!",
+      handleTicket: () => dispatch(handleTicketUpdatedError(false)),
+      status: ticketStatus.ticketUpdatedError,
+    }
+  ]
 
   return (
     <div>
-      <SuccessBar
-        successStatus={ticketCreationSuccess}
-        successMessage={ticketCreationSuccessMessage}
-        handleSuccess={handleTicketCreationSuccess} 
-      />
-      <SuccessBar
-        successStatus={ticketRemovalSuccess}
-        successMessage={ticketRemovalSuccessMessage}
-        handleSuccess={handleTicketRemovalSuccess} 
-      />      
-      <SuccessBar
-        successStatus={ticketUpdationSuccess}
-        successMessage={ticketUpdationSuccessMessage}
-        handleSuccess={handleTicketUpdationSuccess} 
-      />
+      {
+        messages.map((message, index) => (
+          <SuccessBar
+            key={index+message.ticketMessage}
+            successStatus={message.status}
+            successMessage={message.ticketMessage}
+            handleSuccess={message.handleTicket} 
+          />          
+        ))
+      }
+      {
+        errorMessages.map((message, index) => (
+          <ErrorBar
+            key={index+message.ticketMessage}
+            errorStatus={message.status}
+            errorMessage={message.ticketMessage}
+            handleError={message.handleTicket} 
+          />          
+        ))
+      }
       <div className="flex justify-between">
         <TicketModal />
         <button 

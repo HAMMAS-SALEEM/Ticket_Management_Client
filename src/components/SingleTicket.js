@@ -4,8 +4,9 @@ import { useDispatch } from 'react-redux'
 import { statusOptions } from './Options';
 import { fetchTickets, removeTicketFromStore } from '../redux/slices/ticketSlice'
 import { TESelect } from 'tw-elements-react';
+import { handleTicketRemoved, handleTicketRemovedError, handleTicketUpdated, handleTicketUpdatedError } from '../redux/slices/ticketStatusSlice';
 
-const SingleTicket = ({id, title, description, ticketStatus, setErrorUpdate, setErrorRemove}) => {
+const SingleTicket = ({id, title, description, ticketStatus}) => {
   const [popup, setPopup] = useState(false);
   const [updatedOption, setUpdatedOption] = useState("To Do");
 
@@ -13,23 +14,28 @@ const SingleTicket = ({id, title, description, ticketStatus, setErrorUpdate, set
   const handleRemoveTicket = async () => {
     const res = await removeTicket(id)
     if(res.status === 200) {
-        dispatch(removeTicketFromStore(id))
-        setErrorRemove(false);
+        dispatch(removeTicketFromStore(id));
+        dispatch(handleTicketRemovedError(false));
+        dispatch(handleTicketRemoved(true));
     } else {
-      setErrorRemove(true)
+      dispatch(handleTicketRemovedError(true));
     }
   }
 
-  const handlePopup = () => setPopup(!popup);
+  const handlePopup = () => {
+    setUpdatedOption("To Do")
+    setPopup(!popup)
+  };
 
   const handleUpdateTicket = async () => {
     const res = await updateTicket(id, updatedOption)
     if (res.status === 200) {
       dispatch(fetchTickets())
       handlePopup();
-      setErrorUpdate(false);
+      dispatch(handleTicketUpdatedError(false))
+      dispatch(handleTicketUpdated(true))
     } else {
-      setErrorUpdate(true);
+      dispatch(handleTicketUpdatedError(true));
     }
   };
 

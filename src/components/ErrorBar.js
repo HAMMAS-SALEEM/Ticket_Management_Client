@@ -2,7 +2,7 @@ import React from 'react'
 
 const ErrorBar = ({ errorStatus, errorMessage, handleError}) => {
   return (
-    <div className={errorStatus ? "bg-red-500 p-2 my-2 text-white rounded flex items-center justify-between" : "hidden"}>
+    <div className={errorStatus ? "bg-red-500 p-2 m-5 text-white rounded flex items-center justify-between" : "hidden"}>
     {
       errorStatus ? 
       <>
